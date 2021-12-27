@@ -4,6 +4,7 @@ plugins {
 
 subprojects {
     plugins.apply('java')
+    plugins.apply('maven')
 
     group 'io.github.luizotavio'
     version '1.0-SNAPSHOT'

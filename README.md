@@ -35,7 +35,7 @@ repositories() {
 }   
 
 dependencies() {
-    implementation 'com.github.luizotavio:<module-name: bukkit|bungee|common>:1.0.0-SNAPSHOT'
+    implementation 'com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:1.0.0-SNAPSHOT'
 }
 ```
 
@@ -47,7 +47,7 @@ repositories() {
 }
 
 dependencies() {
-    implementation("com.github.luizotavio:<module-name: bukkit|bungee|common>:1.0.0-SNAPSHOT")
+    implementation("com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:1.0.0-SNAPSHOT")
 }
 ```
 
@@ -63,8 +63,8 @@ Maven:
 
 <dependencies>
     <dependency>
-        <groupId>com.github.luizotavio</groupId>
-        <artifactId>bukkit|bungee|common></artifactId>
+        <groupId>com.github.luiz-otavio.wisply-placeholder</groupId>
+        <artifactId>bukkit|common></artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
 </dependencies>

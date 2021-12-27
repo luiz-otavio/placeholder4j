@@ -1,5 +1,6 @@
 # WPlaceholder
 [![](https://jitpack.io/v/luiz-otavio/wisply-placeholder.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
+
 Flexible library to replace placeholders inside messages/texts with Regex expressions.
 
 ## For what it's good for

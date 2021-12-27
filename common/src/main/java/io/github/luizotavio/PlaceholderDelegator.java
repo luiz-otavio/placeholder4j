@@ -1,10 +1,7 @@
 package io.github.luizotavio;
 
-import io.github.luizotavio.cache.BukkitPlaceholderCache;
-import io.github.luizotavio.placeholder.impl.BukkitPlaceholder;
-import io.github.luizotavio.replacer.BukkitPlaceholderReplacer;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
+import io.github.luizotavio.cache.DefaultPlaceholderCache;
+import io.github.luizotavio.replacer.DefaultPlaceholderReplacer;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
@@ -15,7 +12,7 @@ public class PlaceholderDelegator {
 
     public static BukkitFacade createDelegator(Character character) {
         BukkitFacade bukkitFacade = new BukkitFacade(
-          new BukkitPlaceholderReplacer(character)
+          new DefaultPlaceholderReplacer(character)
         );
 
         FACADE_ATOMIC_REFERENCE.set(bukkitFacade);
@@ -23,24 +20,24 @@ public class PlaceholderDelegator {
         return bukkitFacade;
     }
 
-    public static void register(BukkitPlaceholder... placeholders) {
+    public static void register(Placeholder<?>... placeholders) {
         BukkitFacade bukkitFacade = ensureFacade();
 
-        for (BukkitPlaceholder placeholder : placeholders) {
+        for (Placeholder<?> placeholder : placeholders) {
             bukkitFacade.register(placeholder);
         }
     }
 
-    public static String replace(String input, Player player) {
-        return ensureFacade().replace(input, player);
+    public static String replace(String input, Object... args) {
+        return ensureFacade().replace(input, args);
     }
 
-    public static String[] replace(String[] input, @Nullable Player player) {
-        return ensureFacade().replace(input, player);
+    public static String[] replace(String[] input, Object... args) {
+        return ensureFacade().replace(input, args);
     }
 
-    public static Collection<String> replace(Collection<String> input, @Nullable Player player) {
-        return ensureFacade().replace(input, player);
+    public static Collection<String> replace(Collection<String> input, Object... args) {
+        return ensureFacade().replace(input, args);
     }
 
     private static BukkitFacade ensureFacade() {
@@ -53,26 +50,24 @@ public class PlaceholderDelegator {
         return bukkitFacade;
     }
 
-
-
     public static class BukkitFacade {
-        private final BukkitPlaceholderReplacer replacer;
+        private final DefaultPlaceholderReplacer replacer;
 
-        public BukkitFacade(BukkitPlaceholderReplacer replacer) {
+        public BukkitFacade(DefaultPlaceholderReplacer replacer) {
             this.replacer = replacer;
         }
 
-        public void register(BukkitPlaceholder placeholder) {
-            BukkitPlaceholderCache cache = replacer.getCache();
+        public void register(Placeholder<?> placeholder) {
+            DefaultPlaceholderCache cache = replacer.getCache();
 
             if (cache != null) {
                 cache.register(placeholder);
             }
         }
 
-        public String replace(String text, @Nullable Player player) {
+        public String replace(String text, Object... args) {
             try {
-                return replacer.replace(text, player);
+                return replacer.replace(text, args);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -80,9 +75,9 @@ public class PlaceholderDelegator {
             return text;
         }
 
-        public String[] replace(String[] text, @Nullable Player player) {
+        public String[] replace(String[] text, Object... args) {
             try {
-                return replacer.replace(text, player);
+                return replacer.replace(text, args);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -90,9 +85,9 @@ public class PlaceholderDelegator {
             return text;
         }
 
-        public Collection<String> replace(Collection<String> text, @Nullable Player player) {
+        public Collection<String> replace(Collection<String> text, Object... args) {
             try {
-                return replacer.replace(text, player);
+                return replacer.replace(text, args);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

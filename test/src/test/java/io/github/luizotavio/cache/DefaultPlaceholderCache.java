@@ -1,8 +1,6 @@
 package io.github.luizotavio.cache;
 
-import com.google.common.collect.Sets;
 import io.github.luizotavio.Placeholder;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,11 +8,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BukkitPlaceholderCache extends AbstractPlaceholderCache {
+public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
 
-    private final Map<String, Placeholder<Player>> placeholders;
+    private final Map<String, Placeholder<?>> placeholders;
 
-    public BukkitPlaceholderCache(@NotNull Pattern pattern) {
+    public DefaultPlaceholderCache(@NotNull Pattern pattern) {
         super(pattern);
 
         placeholders = new HashMap<>();
@@ -28,7 +26,7 @@ public class BukkitPlaceholderCache extends AbstractPlaceholderCache {
 
     @Override
     public void register(@NotNull Placeholder<?> placeholder) {
-        placeholders.put(placeholder.getName(), (Placeholder<Player>) placeholder);
+        placeholders.put(placeholder.getName(), placeholder);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class BukkitPlaceholderCache extends AbstractPlaceholderCache {
             return Collections.emptySet();
         }
 
-        Set<Placeholder<?>> collection = Sets.newHashSet();
+        Set<Placeholder<?>> collection = new HashSet<>();
 
         Matcher matcher = getPattern().matcher(message);
 

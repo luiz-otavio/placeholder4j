@@ -1,10 +1,9 @@
 package io.github.luizotavio.replacer;
 
 import io.github.luizotavio.Placeholder;
-import io.github.luizotavio.cache.CommonPlaceholderCache;
+import io.github.luizotavio.cache.DefaultPlaceholderCache;
 import io.github.luizotavio.exception.InternalPlaceholderException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,29 +11,26 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class CommonPlaceholderReplacer implements PlaceholderReplacer<String> {
+public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
 
-    private final CommonPlaceholderCache cache;
-    private final Character placeholder;
+    private final DefaultPlaceholderCache cache;
 
-    public CommonPlaceholderReplacer(char placeholder) {
+    public DefaultPlaceholderReplacer(char placeholder) {
         Pattern pattern = Pattern.compile(
           String.format("(%s)(.*)(%s)", placeholder, placeholder),
           Pattern.CASE_INSENSITIVE
         );
 
-        this.placeholder = placeholder;
-
-        this.cache = new CommonPlaceholderCache(pattern);
+        this.cache = new DefaultPlaceholderCache(pattern);
     }
 
-    public CommonPlaceholderCache getCache() {
+    public DefaultPlaceholderCache getCache() {
         return cache;
     }
 
     @NotNull
     @Override
-    public String replace(@NotNull String text, @Nullable String value) throws InternalPlaceholderException {
+    public String replace(@NotNull String text, Object... objects) throws InternalPlaceholderException {
         Set<Placeholder<?>> targets = cache.match(text);
 
         if (targets == null || targets.isEmpty()) {
@@ -45,10 +41,27 @@ public class CommonPlaceholderReplacer implements PlaceholderReplacer<String> {
 
         try {
             for (Placeholder target : targets) {
-                mutable = mutable.replace(
-                  target.getName(),
-                  target.resolve(value)
-                );
+                if (objects.length == 0) {
+                    mutable = mutable.replace(
+                      target.getName(),
+                      target.resolve(null)
+                    );
+
+                    continue;
+                }
+
+                for (Object object : objects) {
+                    if (object == null) {
+                        continue;
+                    }
+
+                    if (!target.isCompatible(object)) continue;
+
+                    mutable = mutable.replace(
+                      target.getName(),
+                      target.resolve(object)
+                    );
+                }
             }
 
             return mutable;
@@ -59,7 +72,7 @@ public class CommonPlaceholderReplacer implements PlaceholderReplacer<String> {
 
     @NotNull
     @Override
-    public Collection<String> replace(@NotNull Collection<String> collection, @Nullable String value) throws InternalPlaceholderException {
+    public Collection<String> replace(@NotNull Collection<String> collection, Object... values) throws InternalPlaceholderException {
         List<String> base = new ArrayList<>(collection);
 
         for (String text : base) {
@@ -69,7 +82,7 @@ public class CommonPlaceholderReplacer implements PlaceholderReplacer<String> {
 
             base.set(
               base.indexOf(text),
-              replace(text, value)
+              replace(text, values)
             );
         }
 
@@ -78,7 +91,7 @@ public class CommonPlaceholderReplacer implements PlaceholderReplacer<String> {
 
     @NotNull
     @Override
-    public String[] replace(@NotNull String[] collection, @Nullable String value) throws InternalPlaceholderException {
+    public String[] replace(@NotNull String[] collection, Object... values) throws InternalPlaceholderException {
         for (int i = 0; i < collection.length; i++) {
             String text = collection[i];
 
@@ -86,7 +99,7 @@ public class CommonPlaceholderReplacer implements PlaceholderReplacer<String> {
                 continue;
             }
 
-            collection[i] = replace(text, value);
+            collection[i] = replace(text, values);
         }
 
         return collection;

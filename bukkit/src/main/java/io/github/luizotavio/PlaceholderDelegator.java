@@ -1,5 +1,7 @@
 package io.github.luizotavio;
 
+import io.github.luizotavio.cache.BukkitPlaceholderCache;
+import io.github.luizotavio.placeholder.impl.BukkitPlaceholder;
 import io.github.luizotavio.replacer.BukkitPlaceholderReplacer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +21,14 @@ public class PlaceholderDelegator {
         FACADE_ATOMIC_REFERENCE.set(bukkitFacade);
 
         return bukkitFacade;
+    }
+
+    public static void register(BukkitPlaceholder... placeholders) {
+        BukkitFacade bukkitFacade = ensureFacade();
+
+        for (BukkitPlaceholder placeholder : placeholders) {
+            bukkitFacade.register(placeholder);
+        }
     }
 
     public static String replace(String input, Player player) {
@@ -50,6 +60,14 @@ public class PlaceholderDelegator {
 
         public BukkitFacade(BukkitPlaceholderReplacer replacer) {
             this.replacer = replacer;
+        }
+
+        public void register(BukkitPlaceholder placeholder) {
+            BukkitPlaceholderCache cache = replacer.getCache();
+
+            if (cache != null) {
+                cache.register(placeholder);
+            }
         }
 
         public String replace(String text, @Nullable Player player) {

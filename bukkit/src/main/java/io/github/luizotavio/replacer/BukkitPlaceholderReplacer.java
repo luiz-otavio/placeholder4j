@@ -29,6 +29,10 @@ public class BukkitPlaceholderReplacer implements PlaceholderReplacer<Player> {
         this.cache = new BukkitPlaceholderCache(pattern);
     }
 
+    public BukkitPlaceholderCache getCache() {
+        return cache;
+    }
+
     @NotNull
     @Override
     public String replace(@NotNull String text, @Nullable Player value) throws InternalPlaceholderException {

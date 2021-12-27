@@ -6,10 +6,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,7 +17,7 @@ public class BukkitPlaceholderCache extends AbstractPlaceholderCache {
     public BukkitPlaceholderCache(@NotNull Pattern pattern) {
         super(pattern);
 
-        placeholders = new LinkedHashMap<>();
+        placeholders = new HashMap<>();
     }
 
     @Nullable

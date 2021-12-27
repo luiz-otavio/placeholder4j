@@ -2,5 +2,17 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'io.github.luizotavio'
+            artifactId = 'common'
+            version = '1.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
+
 group 'io.github.luizotavio'
 version '1.0-SNAPSHOT'

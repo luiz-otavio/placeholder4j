@@ -11,6 +11,18 @@ repositories() {
     }
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'io.github.luizotavio'
+            artifactId = 'bukkit'
+            version = '1.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
+
 dependencies {
     implementation(project(":common"))
 

@@ -3,17 +3,16 @@ plugins {
 }
 
 group 'io.github.luizotavio'
-version 'unspecified'
+version '1.0.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+repositories() {
+    maven {
+        setUrl("https://maven.elmakers.com/repository/")
+    }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-}
+    implementation(project(":common"))
 
-test {
-    useJUnitPlatform()
+    compileOnly("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
 }

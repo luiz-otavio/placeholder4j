@@ -1,0 +1,6 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+}
+
+group 'io.github.luizotavio'
+version '1.0-SNAPSHOT'

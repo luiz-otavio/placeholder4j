@@ -1,0 +1,10 @@
+subprojects {
+    plugins.apply('java')
+
+    group 'io.github.luizotavio'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}

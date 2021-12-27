@@ -1,0 +1,4 @@
+rootProject.name = 'wisply-placeholder'
+
+include('common')
+

@@ -8,14 +8,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommonPlaceholderCache extends AbstractPlaceholderCache {
+public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
 
-    private final Map<String, Placeholder<String>> placeholders;
+    private final Map<String, Placeholder<?>> placeholders;
 
-    public CommonPlaceholderCache(@NotNull Pattern pattern) {
+    public DefaultPlaceholderCache(@NotNull Pattern pattern) {
         super(pattern);
 
-        placeholders = new LinkedHashMap<>();
+        placeholders = new HashMap<>();
     }
 
     @Nullable
@@ -26,7 +26,7 @@ public class CommonPlaceholderCache extends AbstractPlaceholderCache {
 
     @Override
     public void register(@NotNull Placeholder<?> placeholder) {
-        placeholders.put(placeholder.getName(), (Placeholder<String>) placeholder);
+        placeholders.put(placeholder.getName(), placeholder);
     }
 
     @Override

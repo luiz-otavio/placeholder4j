@@ -26,7 +26,7 @@ That essentially means that the `\\{name\\}` will be replaced with the value of 
 There are few ways to add WPlaceholder in your project like:
 
 Gradle DSL:
-```gradle
+```groovy
 repositories() {
     maven {
         name = "jitpack"
@@ -35,7 +35,7 @@ repositories() {
 }   
 
 dependencies() {
-    implementation 'com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:1.0.0-SNAPSHOT'
+    implementation 'com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:{PROJECT_VERSION}'
 }
 ```
 
@@ -47,7 +47,7 @@ repositories() {
 }
 
 dependencies() {
-    implementation("com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:1.0.0-SNAPSHOT")
+    implementation("com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:{PROJECT_VERSION}")
 }
 ```
 
@@ -65,7 +65,7 @@ Maven:
     <dependency>
         <groupId>com.github.luiz-otavio.wisply-placeholder</groupId>
         <artifactId>bukkit|common></artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>{PROJECT_VERSION}</version>
     </dependency>
 </dependencies>
 ```

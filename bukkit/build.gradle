@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'io.github.luizotavio'
-version '1.0.0-SNAPSHOT'
+version '1.0.4-SNAPSHOT'
 
 repositories() {
     maven {
@@ -16,7 +16,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'io.github.luizotavio'
             artifactId = 'bukkit'
-            version = '1.0.0-SNAPSHOT'
+            version = '1.0.4-SNAPSHOT'
 
             from components.java
         }

@@ -47,7 +47,7 @@ public class BukkitPlaceholderReplacer implements PlaceholderReplacer<Player> {
         try {
             for (Placeholder target : targets) {
                 mutable = mutable.replace(
-                  String.format("%s%s%s", placeholder, target.getName(), placeholder),
+                  target.getName(),
                   target.resolve(value)
                 );
             }

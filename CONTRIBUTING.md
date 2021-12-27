@@ -1,3 +1,6 @@
+## Thank you so much!
+This markdown has made by angular community. It's available in [Angular](https://github.com/angular/angular/blob/master/CONTRIBUTING.md) repository.
+
 ##### Updating the commit message
 
 In order to update the commit message of the last commit on your branch:

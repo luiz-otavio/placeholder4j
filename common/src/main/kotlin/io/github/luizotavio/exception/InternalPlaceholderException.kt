@@ -1,8 +1,7 @@
 package io.github.luizotavio.exception
 
-class InternalPlaceholderException(
-    cause: Throwable
-) : Exception(
-    "Internal placeholder exception",
-    cause
-)
+class InternalPlaceholderException : Exception {
+    constructor(throwable: Throwable) : super(throwable)
+
+    constructor(message: String) : super(message)
+}

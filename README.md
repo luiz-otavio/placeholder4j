@@ -35,7 +35,7 @@ repositories() {
 }   
 
 dependencies() {
-    implementation 'com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:{PROJECT_VERSION}'
+    implementation 'com.github.luiz-otavio.wisply-placeholder:common:{PROJECT_VERSION}'
 }
 ```
 
@@ -47,7 +47,7 @@ repositories() {
 }
 
 dependencies() {
-    implementation("com.github.luiz-otavio.wisply-placeholder:<bukkit|common>:{PROJECT_VERSION}")
+    implementation("com.github.luiz-otavio.wisply-placeholder:common:{PROJECT_VERSION}")
 }
 ```
 
@@ -64,7 +64,7 @@ Maven:
 <dependencies>
     <dependency>
         <groupId>com.github.luiz-otavio.wisply-placeholder</groupId>
-        <artifactId>bukkit|common></artifactId>
+        <artifactId>common</artifactId>
         <version>{PROJECT_VERSION}</version>
     </dependency>
 </dependencies>
@@ -78,16 +78,11 @@ public class Main {
     public static void main(String[] args) {
          PlaceholderDelegator.BukkitFacade facade = PlaceholderDelegator.createDelegator('%');
          
-         facade.register(new BukkitPlaceholder("%name%") {
-             @Override
-             public String resolve(@Nullable Player player) {
-                 return player == null ? "Unknown" : player.getName();
-             }
-         });
+         facade.register(new VariablePlaceholder("%name%", "WizardBR_"));
          
-         String message = PlaceholderDelegator.replace("Hello %name%!", Bukkit.getPlayer("WizardBR_"));
-         
-         System.out.println(message);
+         System.out.println(
+           PlaceholderDelegator.replace("Hello %name%!")
+         );
     }
 }
 ```

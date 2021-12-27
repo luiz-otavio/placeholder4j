@@ -8,3 +8,5 @@ subprojects {
         mavenCentral()
     }
 }
+
+jar.enabled = false

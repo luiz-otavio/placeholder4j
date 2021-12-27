@@ -1,6 +1,6 @@
 rootProject.name = 'wisply-placeholder'
 
+include 'api'
 include 'common'
-include 'bukkit'
 include 'test'
 

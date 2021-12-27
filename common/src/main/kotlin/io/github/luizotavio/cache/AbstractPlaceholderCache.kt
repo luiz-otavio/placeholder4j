@@ -11,6 +11,8 @@ abstract class AbstractPlaceholderCache(
 
     abstract fun register(placeholder: Placeholder<*>)
 
+    abstract fun match(message: String): Set<Placeholder<*>>?
+
     abstract fun exists(key: String): Boolean
 
 }

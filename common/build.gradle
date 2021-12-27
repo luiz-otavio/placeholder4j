@@ -1,5 +1,14 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'java'
+}
+
+group 'io.github.luizotavio'
+version '1.0.5-SNAPSHOT'
+
+repositories() {
+    maven {
+        setUrl("https://maven.elmakers.com/repository/")
+    }
 }
 
 publishing {
@@ -7,12 +16,13 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'io.github.luizotavio'
             artifactId = 'common'
-            version = '1.0.4-SNAPSHOT'
+            version = '1.0.5-SNAPSHOT'
 
             from components.java
         }
     }
 }
 
-group 'io.github.luizotavio'
-version '1.0.4-SNAPSHOT'
+dependencies {
+    implementation(project(":api"))
+}

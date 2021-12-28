@@ -8,10 +8,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PlaceholderDelegator {
 
-    private static final AtomicReference<BukkitFacade> FACADE_ATOMIC_REFERENCE = new AtomicReference<>();
+    private static final AtomicReference<PlaceholderFacade> FACADE_ATOMIC_REFERENCE = new AtomicReference<>();
 
-    public static BukkitFacade createDelegator(Character character) {
-        BukkitFacade bukkitFacade = new BukkitFacade(
+    public static PlaceholderFacade createDelegator(Character character) {
+        PlaceholderFacade bukkitFacade = new PlaceholderFacade(
           new DefaultPlaceholderReplacer(character)
         );
 
@@ -21,7 +21,7 @@ public class PlaceholderDelegator {
     }
 
     public static void register(Placeholder<?>... placeholders) {
-        BukkitFacade bukkitFacade = ensureFacade();
+        PlaceholderFacade bukkitFacade = ensureFacade();
 
         for (Placeholder<?> placeholder : placeholders) {
             bukkitFacade.register(placeholder);
@@ -40,8 +40,8 @@ public class PlaceholderDelegator {
         return ensureFacade().replace(input, args);
     }
 
-    private static BukkitFacade ensureFacade() {
-        BukkitFacade bukkitFacade = FACADE_ATOMIC_REFERENCE.get();
+    private static PlaceholderFacade ensureFacade() {
+        PlaceholderFacade bukkitFacade = FACADE_ATOMIC_REFERENCE.get();
 
         if (bukkitFacade == null) {
             throw new NullPointerException("BukkitFacade is null");
@@ -50,10 +50,10 @@ public class PlaceholderDelegator {
         return bukkitFacade;
     }
 
-    public static class BukkitFacade {
+    public static class PlaceholderFacade {
         private final DefaultPlaceholderReplacer replacer;
 
-        public BukkitFacade(DefaultPlaceholderReplacer replacer) {
+        public PlaceholderFacade(DefaultPlaceholderReplacer replacer) {
             this.replacer = replacer;
         }
 

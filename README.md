@@ -76,7 +76,7 @@ Maven:
 
 public class Main {
     public static void main(String[] args) {
-         PlaceholderDelegator.BukkitFacade facade = PlaceholderDelegator.createDelegator('%');
+         PlaceholderDelegator.PlaceholderDelegator facade = PlaceholderDelegator.createDelegator('%');
          
          facade.register(new VariablePlaceholder("%name%", "WizardBR_"));
          

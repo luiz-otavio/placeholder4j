@@ -6,22 +6,22 @@ import io.github.luizotavio.replacer.DefaultPlaceholderReplacer;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PlaceholderDelegator {
+public class PlaceholderAPI {
 
-    private static final AtomicReference<PlaceholderFacade> FACADE_ATOMIC_REFERENCE = new AtomicReference<>();
+    private static final AtomicReference<PlaceholderDelegator> DELEGATOR_ATOMIC_REFERENCE = new AtomicReference<>();
 
-    public static PlaceholderFacade createDelegator(Character character) {
-        PlaceholderFacade bukkitFacade = new PlaceholderFacade(
+    public static PlaceholderDelegator createDelegator(Character character) {
+        PlaceholderDelegator bukkitFacade = new PlaceholderDelegator(
           new DefaultPlaceholderReplacer(character)
         );
 
-        FACADE_ATOMIC_REFERENCE.set(bukkitFacade);
+        DELEGATOR_ATOMIC_REFERENCE.set(bukkitFacade);
 
         return bukkitFacade;
     }
 
     public static void register(Placeholder<?>... placeholders) {
-        PlaceholderFacade bukkitFacade = ensureFacade();
+        PlaceholderDelegator bukkitFacade = ensureFacade();
 
         for (Placeholder<?> placeholder : placeholders) {
             bukkitFacade.register(placeholder);
@@ -40,8 +40,8 @@ public class PlaceholderDelegator {
         return ensureFacade().replace(input, args);
     }
 
-    private static PlaceholderFacade ensureFacade() {
-        PlaceholderFacade bukkitFacade = FACADE_ATOMIC_REFERENCE.get();
+    private static PlaceholderDelegator ensureFacade() {
+        PlaceholderDelegator bukkitFacade = DELEGATOR_ATOMIC_REFERENCE.get();
 
         if (bukkitFacade == null) {
             throw new NullPointerException("BukkitFacade is null");
@@ -50,10 +50,10 @@ public class PlaceholderDelegator {
         return bukkitFacade;
     }
 
-    public static class PlaceholderFacade {
+    public static class PlaceholderDelegator {
         private final DefaultPlaceholderReplacer replacer;
 
-        public PlaceholderFacade(DefaultPlaceholderReplacer replacer) {
+        public PlaceholderDelegator(DefaultPlaceholderReplacer replacer) {
             this.replacer = replacer;
         }
 

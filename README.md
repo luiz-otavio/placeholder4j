@@ -35,7 +35,7 @@ repositories() {
 }   
 
 dependencies() {
-    implementation 'com.github.luiz-otavio.wisply-placeholder:common:{PROJECT_VERSION}'
+    implementation 'com.github.luiz-otavio:wisply-placeholder:{PROJECT_VERSION}'
 }
 ```
 
@@ -47,7 +47,7 @@ repositories() {
 }
 
 dependencies() {
-    implementation("com.github.luiz-otavio.wisply-placeholder:common:{PROJECT_VERSION}")
+    implementation("com.github.luiz-otavio:wisply-placeholder:{PROJECT_VERSION}")
 }
 ```
 
@@ -63,8 +63,8 @@ Maven:
 
 <dependencies>
     <dependency>
-        <groupId>com.github.luiz-otavio.wisply-placeholder</groupId>
-        <artifactId>common</artifactId>
+        <groupId>com.github.luiz-otavio</groupId>
+        <artifactId>wisply-placeholder</artifactId>
         <version>{PROJECT_VERSION}</version>
     </dependency>
 </dependencies>
@@ -76,12 +76,12 @@ Maven:
 
 public class Main {
     public static void main(String[] args) {
-         PlaceholderDelegator.PlaceholderDelegator facade = PlaceholderDelegator.createDelegator('%');
-         
-         facade.register(new VariablePlaceholder("%name%", "WizardBR_"));
+         PlaceholderAPI.PlaceholderDelegator delegator = PlaceholderAPI.createDelegator('%');
+
+        delegator.register(new VariablePlaceholder("%name%", "WizardBR_"));
          
          System.out.println(
-           PlaceholderDelegator.replace("Hello %name%!")
+           PlaceholderAPI.replace("Hello %name%!")
          );
     }
 }

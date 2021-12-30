@@ -87,3 +87,9 @@ public class Main {
 }
 ```
 It will be: `Hello WizardBR_!`
+
+## License
+This project is licensed under the GNU General Public License v3.0.
+
+## Contributing
+Please, feel free to contribute!

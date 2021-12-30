@@ -12,6 +12,9 @@ repositories() {
     }
 }
 
+jar.enabled = false
+shadowJar.classifier = ""
+
 publishing {
     publications {
         shadow(MavenPublication) { publication ->

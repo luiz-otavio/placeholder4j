@@ -2,13 +2,5 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 }
 
-publishing {
-    publications {
-        shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
-        }
-    }
-}
-
 group 'io.github.luizotavio'
 version '1.0.5-SNAPSHOT'

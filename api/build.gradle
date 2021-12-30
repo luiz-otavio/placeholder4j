@@ -4,3 +4,9 @@ plugins {
 
 group placeholder_groupId
 version placeholder_version
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

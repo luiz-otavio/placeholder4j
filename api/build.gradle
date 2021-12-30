@@ -4,12 +4,8 @@ plugins {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            groupId = 'io.github.luizotavio'
-            artifactId = 'api'
-            version = '1.0.5-SNAPSHOT'
-
-            from components.java
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
         }
     }
 }

@@ -8,16 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
 
     private final DefaultPlaceholderCache cache;
 
-    public DefaultPlaceholderReplacer(char placeholder) {
+    public DefaultPlaceholderReplacer() {
         Pattern pattern = Pattern.compile(
-          String.format("(%s)(.*)(%s)", placeholder, placeholder),
+          "[%]([^%]+)[%]",
           Pattern.CASE_INSENSITIVE
         );
 
@@ -31,43 +31,43 @@ public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
     @NotNull
     @Override
     public String replace(@NotNull String text, Object... objects) throws InternalPlaceholderException {
-        Set<Placeholder<?>> targets = cache.match(text);
+        Matcher targets = cache.match(text);
 
-        if (targets == null || targets.isEmpty()) {
+        if (targets == null) {
             return text;
         }
 
-        String mutable = text;
+        // Use string builder to avoid multiple string concatenation
+        StringBuilder stringBuilder = new StringBuilder(text);
+
+        int index = 0;
 
         try {
-            for (Placeholder target : targets) {
-                if (objects.length == 0) {
-                    mutable = mutable.replace(
-                      target.getName(),
-                      target.resolve(null)
-                    );
+            while (targets.find()) {
+                String group = targets.group(1);
 
+                if (group == null) {
                     continue;
                 }
 
-                for (Object object : objects) {
-                    if (object == null) {
-                        continue;
-                    }
+                int target = targets.start(),
+                    end = targets.end();
 
-                    if (!target.isCompatible(object)) continue;
+                Placeholder placeholder = cache.get(group);
 
-                    mutable = mutable.replace(
-                      target.getName(),
-                      target.resolve(object)
-                    );
+                if (placeholder != null) {
+                    Object value = objects.length == 0 || objects.length <= index ? null : objects[index];
+
+                    stringBuilder.replace(target, end, placeholder.resolve(value));
                 }
             }
-
-            return mutable;
-        } catch (Exception exception) {
-            throw new InternalPlaceholderException(exception);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new InternalPlaceholderException(
+                String.format("Invalid number of values provided: %d", index)
+            );
         }
+
+        return stringBuilder.toString();
     }
 
     @NotNull

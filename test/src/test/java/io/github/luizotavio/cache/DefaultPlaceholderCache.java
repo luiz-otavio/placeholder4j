@@ -36,29 +36,11 @@ public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
 
     @Nullable
     @Override
-    public Set<Placeholder<?>> match(@NotNull String message) {
+    public Matcher match(@NotNull String message) {
         if (message.isEmpty()) {
-            return Collections.emptySet();
+            return null;
         }
 
-        Set<Placeholder<?>> collection = new HashSet<>();
-
-        Matcher matcher = getPattern().matcher(message);
-
-        while (matcher.find()) {
-            String key = matcher.group();
-
-            if (key.isEmpty()) {
-                return null;
-            }
-
-            Placeholder<?> placeholder = placeholders.get(key);
-
-            if (placeholder != null) {
-                collection.add(placeholder);
-            }
-        }
-
-        return collection;
+        return getPattern().matcher(message);
     }
 }

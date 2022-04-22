@@ -1,6 +1,7 @@
 package io.github.luizotavio.cache
 
 import io.github.luizotavio.Placeholder
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 abstract class AbstractPlaceholderCache(
@@ -11,7 +12,8 @@ abstract class AbstractPlaceholderCache(
 
     abstract fun register(placeholder: Placeholder<*>)
 
-    abstract fun match(message: String): Set<Placeholder<*>>?
+    // Change to return the matcher instead of alot of placeholders
+    abstract fun match(message: String): Matcher?
 
     abstract fun exists(key: String): Boolean
 

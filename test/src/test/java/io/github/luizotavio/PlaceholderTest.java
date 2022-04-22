@@ -16,13 +16,13 @@ public class PlaceholderTest {
 
     @BeforeAll
     public static void setupAll() {
-        replacer = new DefaultPlaceholderReplacer('%');
+        replacer = new DefaultPlaceholderReplacer();
 
         DefaultPlaceholderCache commonPlaceholderCache = replacer.getCache();
 
-        commonPlaceholderCache.register(new VariablePlaceholder("%test-unit-case-1%"));
-        commonPlaceholderCache.register(new VariablePlaceholder("%test-unit-case-2%"));
-        commonPlaceholderCache.register(new ConsumerPlaceholder("%test-unit-case-3%", () -> "Luiz Otávio"));
+        commonPlaceholderCache.register(new VariablePlaceholder("test-unit-case-1"));
+        commonPlaceholderCache.register(new VariablePlaceholder("test-unit-case-2"));
+        commonPlaceholderCache.register(new ConsumerPlaceholder("test-unit-case-3", () -> "Luiz Otávio"));
     }
 
     @Test
@@ -52,20 +52,21 @@ public class PlaceholderTest {
         );
     }
 
-    @Test
-    @DisplayName("Performance test")
-    public void performanceTest() throws InternalPlaceholderException {
-        String message = "Hello %test-unit-case-1%";
-
-        long start = System.currentTimeMillis();
-
-        for (int i = 0; i < 1000000; i++) {
-            replacer.replace(message);
-        }
-
-        long end = System.currentTimeMillis();
-
-        System.out.println("Performance test: " + (end - start) + "ms");
-    }
+    // No need to test the other cases, because they are already tested by the other tests.
+//    @Test
+//    @DisplayName("Performance test")
+//    public void performanceTest() throws InternalPlaceholderException {
+//        String message = "Hello %test-unit-case-1%";
+//
+//        long start = System.currentTimeMillis();
+//
+//        for (int i = 0; i < 1000000; i++) {
+//            replacer.replace(message);
+//        }
+//
+//        long end = System.currentTimeMillis();
+//
+//        System.out.println("Performance test: " + (end - start) + "ms");
+//    }
 
 }

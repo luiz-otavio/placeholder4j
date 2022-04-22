@@ -10,9 +10,9 @@ public class PlaceholderAPI {
 
     private static final AtomicReference<PlaceholderDelegator> DELEGATOR_ATOMIC_REFERENCE = new AtomicReference<>();
 
-    public static PlaceholderDelegator createDelegator(Character character) {
+    public static PlaceholderDelegator createDelegator() {
         PlaceholderDelegator bukkitFacade = new PlaceholderDelegator(
-          new DefaultPlaceholderReplacer(character)
+          new DefaultPlaceholderReplacer()
         );
 
         DELEGATOR_ATOMIC_REFERENCE.set(bukkitFacade);

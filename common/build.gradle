@@ -1,18 +1,15 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'maven-publish'
 }
 
-group placeholder_groupId
-version placeholder_version
-
 repositories() {
     maven {
-        setUrl("https://maven.elmakers.com/repository/")
+        name = 'elmakers'
+        url = 'https://maven.elmakers.com/repository/'
     }
 }
 
-jar.enabled = false
 shadowJar.classifier = ""
 
 publishing {

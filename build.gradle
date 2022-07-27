@@ -5,8 +5,8 @@ plugins {
 subprojects {
     plugins.apply('java')
 
-    group 'io.github.luizotavio'
-    version '1.0-SNAPSHOT'
+    group placeholder_groupId
+    version placeholder_version
 
     repositories {
         mavenCentral()

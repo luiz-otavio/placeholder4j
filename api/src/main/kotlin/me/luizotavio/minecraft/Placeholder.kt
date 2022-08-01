@@ -25,5 +25,4 @@ abstract class Placeholder<T>(
     abstract fun isCompatible(value: Any): Boolean
 
     abstract fun resolve(consumer: T?): String
-
 }

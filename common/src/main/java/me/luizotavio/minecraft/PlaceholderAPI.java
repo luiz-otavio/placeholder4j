@@ -3,12 +3,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>5.
  */
@@ -19,6 +19,7 @@ import me.luizotavio.minecraft.replacer.DefaultPlaceholderReplacer;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 
 /**
  * @author Luiz Otávio de Farias Corrêa
@@ -26,92 +27,68 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PlaceholderAPI {
 
-    private static final AtomicReference<PlaceholderDelegator> DELEGATOR_ATOMIC_REFERENCE = new AtomicReference<>();
+    private static final Logger LOGGER = Logger.getLogger(PlaceholderAPI.class.getName());
 
-    public static PlaceholderDelegator createDelegator() {
-        PlaceholderDelegator bukkitFacade = new PlaceholderDelegator(
-          new DefaultPlaceholderReplacer()
-        );
+    private static final AtomicReference<PlaceholderAPI> DELEGATOR_ATOMIC_REFERENCE = new AtomicReference<>();
 
-        DELEGATOR_ATOMIC_REFERENCE.set(bukkitFacade);
+    private final DefaultPlaceholderReplacer replacer;
 
-        return bukkitFacade;
-    }
+    public PlaceholderAPI() {
+        replacer = null;
 
-    public static void register(Placeholder<?>... placeholders) {
-        PlaceholderDelegator bukkitFacade = ensureFacade();
+        DELEGATOR_ATOMIC_REFERENCE.accumulateAndGet(this, (prev, current) -> {
+            if (prev == null) {
+                LOGGER.info("Initializing PlaceholderAPI...");
 
-        for (Placeholder<?> placeholder : placeholders) {
-            bukkitFacade.register(placeholder);
-        }
-    }
-
-    public static String replace(String input, Object... args) {
-        return ensureFacade().replace(input, args);
-    }
-
-    public static String[] replace(String[] input, Object... args) {
-        return ensureFacade().replace(input, args);
-    }
-
-    public static Collection<String> replace(Collection<String> input, Object... args) {
-        return ensureFacade().replace(input, args);
-    }
-
-    private static PlaceholderDelegator ensureFacade() {
-        PlaceholderDelegator bukkitFacade = DELEGATOR_ATOMIC_REFERENCE.get();
-
-        if (bukkitFacade == null) {
-            throw new NullPointerException("BukkitFacade is null");
-        }
-
-        return bukkitFacade;
-    }
-
-    public static class PlaceholderDelegator {
-        private final DefaultPlaceholderReplacer replacer;
-
-        public PlaceholderDelegator(DefaultPlaceholderReplacer replacer) {
-            this.replacer = replacer;
-        }
-
-        public void register(Placeholder<?> placeholder) {
-            DefaultPlaceholderCache cache = replacer.getCache();
-
-            if (cache != null) {
-                cache.register(placeholder);
+                return new PlaceholderAPI(
+                    new DefaultPlaceholderReplacer()
+                );
+            } else {
+                LOGGER.info("PlaceholderAPI already initialized!");
+                return prev;
             }
+        });
+    }
+
+    protected PlaceholderAPI(DefaultPlaceholderReplacer replacer) {
+        this.replacer = replacer;
+    }
+
+    public void register(Placeholder<?> placeholder) {
+        DefaultPlaceholderCache cache = replacer.getCache();
+
+        if (cache != null) {
+            cache.register(placeholder);
+        }
+    }
+
+    public String replace(String text, Object... args) {
+        try {
+            return replacer.replace(text, args);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
-        public String replace(String text, Object... args) {
-            try {
-                return replacer.replace(text, args);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+        return text;
+    }
 
-            return text;
+    public String[] replace(String[] text, Object... args) {
+        try {
+            return replacer.replace(text, args);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
-        public String[] replace(String[] text, Object... args) {
-            try {
-                return replacer.replace(text, args);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+        return text;
+    }
 
-            return text;
+    public Collection<String> replace(Collection<String> text, Object... args) {
+        try {
+            return replacer.replace(text, args);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
-        public Collection<String> replace(Collection<String> text, Object... args) {
-            try {
-                return replacer.replace(text, args);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-
-            return text;
-        }
-
+        return text;
     }
 }

@@ -35,7 +35,7 @@ repositories() {
 }   
 
 dependencies() {
-    implementation 'com.github.luiz-otavio:wisply-placeholder:{PROJECT_VERSION}'
+    implementation 'com.github.luiz-otavio:placeholder4j:{PROJECT_VERSION}'
 }
 ```
 
@@ -47,7 +47,7 @@ repositories() {
 }
 
 dependencies() {
-    implementation("com.github.luiz-otavio:wisply-placeholder:{PROJECT_VERSION}")
+    implementation("com.github.luiz-otavio:placeholder4j:{PROJECT_VERSION}")
 }
 ```
 
@@ -64,7 +64,7 @@ Maven:
 <dependencies>
     <dependency>
         <groupId>com.github.luiz-otavio</groupId>
-        <artifactId>wisply-placeholder</artifactId>
+        <artifactId>placeholder4j</artifactId>
         <version>{PROJECT_VERSION}</version>
     </dependency>
 </dependencies>
@@ -72,13 +72,11 @@ Maven:
 
 ## How to use it
 ```java
-// Bukkit example:
-
 public class Main {
     public static void main(String[] args) {
          PlaceholderAPI.PlaceholderDelegator delegator = PlaceholderAPI.createDelegator('%');
 
-        delegator.register(new VariablePlaceholder("%name%", "WizardBR_"));
+         delegator.register(new VariablePlaceholder("%name%", "WizardBR_"));
          
          System.out.println(
            PlaceholderAPI.replace("Hello %name%!")

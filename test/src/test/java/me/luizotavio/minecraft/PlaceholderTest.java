@@ -3,12 +3,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>5.
  */
@@ -69,22 +69,4 @@ public class PlaceholderTest {
           replacer.replace("%test-unit-case-3%")
         );
     }
-
-    // No need to test the other cases, because they are already tested by the other tests.
-//    @Test
-//    @DisplayName("Performance test")
-//    public void performanceTest() throws InternalPlaceholderException {
-//        String message = "Hello %test-unit-case-1%";
-//
-//        long start = System.currentTimeMillis();
-//
-//        for (int i = 0; i < 1000000; i++) {
-//            replacer.replace(message);
-//        }
-//
-//        long end = System.currentTimeMillis();
-//
-//        System.out.println("Performance test: " + (end - start) + "ms");
-//    }
-
 }

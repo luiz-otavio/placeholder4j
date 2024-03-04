@@ -3,17 +3,18 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>5.
  */
 package me.luizotavio.minecraft.replacer;
 
+import me.luizotavio.minecraft.Placeholder;
 import me.luizotavio.minecraft.cache.DefaultPlaceholderCache;
 import me.luizotavio.minecraft.exception.InternalPlaceholderException;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +22,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * @author Luiz Otávio de Farias Corrêa
@@ -30,15 +33,14 @@ import java.util.regex.Pattern;
  */
 public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
 
+    public static final String PLACEHOLDER_PATTERN_STRING = "[%]([^%]+)[%]";
+
     private final DefaultPlaceholderCache cache;
 
     public DefaultPlaceholderReplacer() {
-        Pattern pattern = Pattern.compile(
-          "[%]([^%]+)[%]",
-          Pattern.CASE_INSENSITIVE
+        this.cache = new DefaultPlaceholderCache(
+            Pattern.compile(PLACEHOLDER_PATTERN_STRING, Pattern.CASE_INSENSITIVE)
         );
-
-        this.cache = new DefaultPlaceholderCache(pattern);
     }
 
     public DefaultPlaceholderCache getCache() {
@@ -47,38 +49,42 @@ public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
 
     @NotNull
     @Override
-    public String replace(@NotNull String text, Object... objects) throws InternalPlaceholderException {
+    public String replace(@NotNull String text, @NotNull Object... objects) throws InternalPlaceholderException {
         Matcher targets = cache.match(text);
 
         if (targets == null) {
             return text;
         }
 
-        // Use string builder to avoid multiple string concatenation
-        StringBuilder stringBuilder = new StringBuilder(text);
+        Stream<Object> objectStream = Stream.of(objects);
 
-        int index = 0;
+        AtomicInteger currentIndex = new AtomicInteger();
 
-        try {
-            while (targets.find()) {
-                String group = targets.group(1);
+        return targets.replaceAll(result -> {
+            String group = result.group(1);
 
-                if (group == null) {
-                    continue;
+            if (group == null) {
+                return "N/A";
+            }
+
+            Placeholder placeholder = cache.get(group);
+
+            if (placeholder == null) {
+                Object object = objects[currentIndex.getAndIncrement()];
+
+                if (object == null) {
+                    return "N/A";
                 }
 
-                int target = targets.start(),
-                    end = targets.end();
+                return object.toString();
+            } else {
+                Object object = objectStream.filter(placeholder::isCompatible)
+                    .findAny()
+                    .orElse(null);
 
-                stringBuilder.replace(target, end, String.valueOf(objects[index++]));
+                return placeholder.resolve(object);
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new InternalPlaceholderException(
-              String.format("Invalid number of values provided: %d", index)
-            );
-        }
-
-        return stringBuilder.toString();
+        });
     }
 
     @NotNull

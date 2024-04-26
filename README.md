@@ -2,7 +2,7 @@
 <div align="center">
     <img src="https://img.shields.io/github/license/luiz-otavio/placeholder4j?style=for-the-badge" alt="License"/>
     <img src="https://img.shields.io/github/v/release/luiz-otavio/placeholder4j?style=for-the-badge" alt="Release"/>
-    <img src="https://img.shields.io/github/workflow/status/luiz-otavio/placeholder4j/Java%20CI%20with%20Gradle?style=for-the-badge" alt="Build"/>
+    <img src="https://img.shields.io/github/actions/workflow/status/luiz-otavio/placeholder4j/gradle.yml?branch=main&style=for-the-badge" alt="Build"/>
     <img src="https://img.shields.io/github/issues/luiz-otavio/placeholder4j?style=for-the-badge" alt="Issues"/>
     <img src="https://img.shields.io/github/forks/luiz-otavio/placeholder4j?style=for-the-badge" alt="Forks"/>
     <img src="https://img.shields.io/github/stars/luiz-otavio/placeholder4j?style=for-the-badge" alt="Stars"/>

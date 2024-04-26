@@ -1,8 +1,12 @@
 # <p align="center">Placeholder4j</p>
-<a align="center">[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
-[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder/month.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
-[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder/week.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
-</a>
+<div align="center">
+    <img src="https://img.shields.io/github/license/luiz-otavio/placeholder4j?style=for-the-badge" alt="License"/>
+    <img src="https://img.shields.io/github/v/release/luiz-otavio/placeholder4j?style=for-the-badge" alt="Release"/>
+    <img src="https://img.shields.io/github/workflow/status/luiz-otavio/placeholder4j/Java%20CI%20with%20Gradle?style=for-the-badge" alt="Build"/>
+    <img src="https://img.shields.io/github/issues/luiz-otavio/placeholder4j?style=for-the-badge" alt="Issues"/>
+    <img src="https://img.shields.io/github/forks/luiz-otavio/placeholder4j?style=for-the-badge" alt="Forks"/>
+    <img src="https://img.shields.io/github/stars/luiz-otavio/placeholder4j?style=for-the-badge" alt="Stars"/>
+</div>
 
 ## Beside of understanding how placeholders are important: </p>
 Constantly we need to replace some values in a string. For example, if we have a message like this: `Hello {name}, how are you?` 
@@ -28,18 +32,18 @@ public static void main(String[]args){
 ```
 
 ## How Placeholder4j can help you
-Placeholder4j is a library that helps you to replace placeholders in a string. It is simple to use and you can replace multiple placeholders in a single call.
+Placeholder4j is a library that helps you to replace placeholders in a string. It is simple to use, and you can replace multiple placeholders in a single call.
 ```java
 public static void main(String[]args){
-    PlaceholderAPI.PlaceholderDelegator delegator = PlaceholderAPI.createDelegator('%');
+    PlaceholderAPI placeholderAPI = new PlaceholderAPI();
     // Registering a new placeholder for the name
-    delegator.register(new VariablePlaceholder("%name%", "John"));
+    placeholderAPI.register(new VariablePlaceholder("%name%", "John"));
     // Registering a new placeholder for the age
-    delegator.register(new VariablePlaceholder("%age%", "20"));
+    placeholderAPI.register(new VariablePlaceholder("%age%", "20"));
     
     // Calling PlaceholderAPI to replace it.
     System.out.println(
-        PlaceholderAPI.replace("Hello %name%, how are you? I'm %age% years old.")
+        placeholderAPI.replace("Hello %name%, how are you? I'm %age% years old.")
     );
 }
 ```

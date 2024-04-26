@@ -1,13 +1,12 @@
-# WPlaceholder
-[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
+# <p align="center">Placeholder4j</p>
+<a align="center">[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
+[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder/month.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
+[![](https://jitpack.io/v/luiz-otavio/wisply-placeholder/week.svg)](https://jitpack.io/#luiz-otavio/wisply-placeholder)
+</a>
 
-Flexible library to replace placeholders inside messages/texts with Regex expressions.
-
-## For what it's good for
-Placeholder replacement is a common task in many languages. This library is a flexible and easy to use solution to replace texts/messages with new messages.
-
-## Besides replacing placeholders
-To understand how does it works, let's look at an example:
+## Beside of understanding how placeholders are important: </p>
+Constantly we need to replace some values in a string. For example, if we have a message like this: `Hello {name}, how are you?` 
+and we want to replace the `{name}` with a value, we can use the `replaceAll` method from the `String` class.
 ```java
 public static void main(String[]args){
     String message = "Hello {name}, how are you?";
@@ -17,31 +16,49 @@ public static void main(String[]args){
 }
 ```
 
-It will print: `Hello John, how are you?`
+But, if we have multiple placeholders, we need to call the `replaceAll` method multiple times which is not a good practice.
+```java
+public static void main(String[]args){
+    String message = "Hello {name}, how are you? I'm {age} years old.";
+    String name = "John";
+    String age = "20";
+    String replacedMessage = message.replaceAll("\\{name\\}", name).replaceAll("\\{age\\}", age);
+    System.out.println(replacedMessage);
+}
+```
 
-The `\\{name\\}` is a placeholder. It's a special character that is used to replace a value.
-That essentially means that the `\\{name\\}` will be replaced with the value of the `name` variable.
+## How Placeholder4j can help you
+Placeholder4j is a library that helps you to replace placeholders in a string. It is simple to use and you can replace multiple placeholders in a single call.
+```java
+public static void main(String[]args){
+    PlaceholderAPI.PlaceholderDelegator delegator = PlaceholderAPI.createDelegator('%');
+    // Registering a new placeholder for the name
+    delegator.register(new VariablePlaceholder("%name%", "John"));
+    // Registering a new placeholder for the age
+    delegator.register(new VariablePlaceholder("%age%", "20"));
+    
+    // Calling PlaceholderAPI to replace it.
+    System.out.println(
+        PlaceholderAPI.replace("Hello %name%, how are you? I'm %age% years old.")
+    );
+}
+```
+Calling it, the output will be: `Hello John, how are you? I'm 20 years old.`
 
-## Applying WPlaceholder
-There are few ways to add WPlaceholder in your project like:
-
-Gradle DSL:
+## How to install
+Groovy DSL:
 ```groovy
-repositories() {
-    maven {
-        name = "jitpack"
-        url = 'https://jitpack.io'
-    }
-}   
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 
-dependencies() {
+dependencies {
     implementation 'com.github.luiz-otavio:placeholder4j:{PROJECT_VERSION}'
 }
 ```
 
 Kotlin DSL:
 ```kotlin
-
 repositories() {
     maven("https://jitpack.io")
 }
@@ -70,24 +87,8 @@ Maven:
 </dependencies>
 ```
 
-## How to use it
-```java
-public class Main {
-    public static void main(String[] args) {
-         PlaceholderAPI.PlaceholderDelegator delegator = PlaceholderAPI.createDelegator('%');
-
-         delegator.register(new VariablePlaceholder("%name%", "WizardBR_"));
-         
-         System.out.println(
-           PlaceholderAPI.replace("Hello %name%!")
-         );
-    }
-}
-```
-It will be: `Hello WizardBR_!`
-
 ## License
-This project is licensed under the GNU General Public License v3.0.
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Contributing
-Please, feel free to contribute!
+Open an issue or a pull request and let's discuss about it.

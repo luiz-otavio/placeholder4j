@@ -31,25 +31,10 @@ public class PlaceholderAPI {
 
     private static final Logger LOGGER = Logger.getLogger(PlaceholderAPI.class.getName());
 
-    private static final AtomicReference<PlaceholderAPI> DELEGATOR_ATOMIC_REFERENCE = new AtomicReference<>();
-
     private final DefaultPlaceholderReplacer replacer;
 
     public PlaceholderAPI() {
-        replacer = null;
-
-        DELEGATOR_ATOMIC_REFERENCE.accumulateAndGet(this, (prev, current) -> {
-            if (prev == null) {
-                LOGGER.info("Initializing PlaceholderAPI...");
-
-                return new PlaceholderAPI(
-                    new DefaultPlaceholderReplacer()
-                );
-            } else {
-                LOGGER.info("PlaceholderAPI already initialized!");
-                return prev;
-            }
-        });
+        this(new DefaultPlaceholderReplacer());
     }
 
     protected PlaceholderAPI(@NotNull DefaultPlaceholderReplacer replacer) {
@@ -68,7 +53,7 @@ public class PlaceholderAPI {
         try {
             return replacer.replace(text, args);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            LOGGER.severe("An error occurred while replacing placeholders: " + exception.getMessage());
         }
 
         return text;
@@ -78,7 +63,7 @@ public class PlaceholderAPI {
         try {
             return replacer.replace(text, args);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            LOGGER.severe("An error occurred while replacing placeholders: " + exception.getMessage());
         }
 
         return text;
@@ -88,7 +73,7 @@ public class PlaceholderAPI {
         try {
             return replacer.replace(text, args);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            LOGGER.severe("An error occurred while replacing placeholders: " + exception.getMessage());
         }
 
         return text;

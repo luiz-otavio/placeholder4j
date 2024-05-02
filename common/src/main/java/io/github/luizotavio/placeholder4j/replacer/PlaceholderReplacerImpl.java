@@ -32,8 +32,6 @@ import java.util.stream.Stream;
  */
 public class PlaceholderReplacerImpl implements PlaceholderReplacer {
 
-    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
-
     private final PlaceholderCache cache;
 
     public PlaceholderReplacerImpl(@NotNull PlaceholderCache cache) {
@@ -44,7 +42,7 @@ public class PlaceholderReplacerImpl implements PlaceholderReplacer {
     @Override
     public String replace(
         @NotNull String text,
-        @Nullable Object... objects
+        @NotNull Object... objects
     ) throws InternalPlaceholderException {
         Matcher targets = match(text);
 
@@ -62,14 +60,14 @@ public class PlaceholderReplacerImpl implements PlaceholderReplacer {
             }
 
             Object object = null;
-            for (@NotNull Object targetObject : objects == null ? EMPTY_OBJECT_ARRAY : objects) {
+            compatible: for (@NotNull Object targetObject : objects) {
                 if (placeholder.isCompatible(targetObject)) {
                     object = targetObject;
-                    break;
+                    break compatible;
                 }
             }
 
-            if (object == null) {
+            if (object == null && objects.length > 0) {
                 throw new InternalPlaceholderException("Object not found for placeholder: " + group);
             }
 
@@ -85,7 +83,7 @@ public class PlaceholderReplacerImpl implements PlaceholderReplacer {
     @Override
     public Collection<String> replace(
         @NotNull Collection<String> collection,
-        @Nullable Object... values
+        @NotNull Object... values
     ) throws InternalPlaceholderException {
         List<String> base = new ArrayList<>(collection);
 
@@ -107,7 +105,7 @@ public class PlaceholderReplacerImpl implements PlaceholderReplacer {
     @Override
     public String[] replace(
         @NotNull String[] collection,
-        @Nullable Object... values
+        @NotNull Object... values
     ) throws InternalPlaceholderException {
         for (int i = 0; i < collection.length; i++) {
             String text = collection[i];

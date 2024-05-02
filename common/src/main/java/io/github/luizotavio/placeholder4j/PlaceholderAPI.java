@@ -26,21 +26,23 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
 public class PlaceholderAPI {
 
     private final PlaceholderReplacer replacer;
+
     private final PlaceholderCache cache;
 
     private final Logger logger;
+
 
     public PlaceholderAPI() {
         this(
             Logger.getLogger("PlaceholderAPI"),
             new PlaceholderCacheImpl(
-                Pattern.compile("%(.+?)%", Pattern.CASE_INSENSITIVE)
+                Pattern.compile("%([^%]+)%", Pattern.CASE_INSENSITIVE)
             )
         );
     }
@@ -59,7 +61,7 @@ public class PlaceholderAPI {
         this(
             replacer,
             new PlaceholderCacheImpl(
-                Pattern.compile("%(.+?)%", Pattern.CASE_INSENSITIVE)
+                Pattern.compile("%([^%]+)%", Pattern.CASE_INSENSITIVE)
             ),
             logger
         );
@@ -115,5 +117,20 @@ public class PlaceholderAPI {
         }
 
         return text;
+    }
+
+    @NotNull
+    public PlaceholderCache getCache() {
+        return cache;
+    }
+
+    @NotNull
+    public PlaceholderReplacer getReplacer() {
+        return replacer;
+    }
+
+    @NotNull
+    public Logger getLogger() {
+        return logger;
     }
 }

@@ -28,14 +28,15 @@ import java.util.regex.Pattern;
  * @author Luiz O. F. Corrêa
  * @since 02/05/2024
  */
-public class PlaceholderCacheImpl extends AbstractPlaceholderCache {
+public class PlaceholderCacheImpl implements PlaceholderCache {
 
     private final Map<String, Placeholder<?>> placeholders;
 
-    public PlaceholderCacheImpl(@NotNull Pattern pattern) {
-        super(pattern);
+    private final Pattern pattern;
 
-        placeholders = new Hashtable<>();
+    public PlaceholderCacheImpl(@NotNull Pattern pattern) {
+        this.pattern = pattern;
+        this.placeholders = new Hashtable<>();
     }
 
     @Nullable
@@ -63,5 +64,11 @@ public class PlaceholderCacheImpl extends AbstractPlaceholderCache {
     @Override
     public Collection<Placeholder<?>> getPlaceholders() {
         return Collections.unmodifiableCollection(placeholders.values());
+    }
+
+    @NotNull
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

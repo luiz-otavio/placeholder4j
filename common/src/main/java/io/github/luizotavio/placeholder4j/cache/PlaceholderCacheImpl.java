@@ -56,12 +56,7 @@ public class PlaceholderCacheImpl extends AbstractPlaceholderCache {
 
     @Override
     public boolean register(@NotNull Placeholder<?> placeholder) {
-        if (exists(placeholder.getName())) {
-            return false;
-        }
-
-        placeholders.put(placeholder.getName(), placeholder);
-        return true;
+        return placeholders.put(placeholder.getName(), placeholder) != null;
     }
 
     @NotNull

@@ -1,4 +1,4 @@
-rootProject.name = 'wisply-placeholder'
+rootProject.name = 'placeholder4j'
 
 include(
     'api',

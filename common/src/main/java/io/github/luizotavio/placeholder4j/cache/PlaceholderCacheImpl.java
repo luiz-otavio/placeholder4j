@@ -18,22 +18,25 @@ import io.github.luizotavio.placeholder4j.Placeholder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.regex.Matcher;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
-public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
+public class PlaceholderCacheImpl implements PlaceholderCache {
 
     private final Map<String, Placeholder<?>> placeholders;
 
-    public DefaultPlaceholderCache(@NotNull Pattern pattern) {
-        super(pattern);
+    private final Pattern pattern;
 
-        placeholders = new HashMap<>();
+    public PlaceholderCacheImpl(@NotNull Pattern pattern) {
+        this.pattern = pattern;
+        this.placeholders = new Hashtable<>();
     }
 
     @Nullable
@@ -43,8 +46,8 @@ public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
     }
 
     @Override
-    public void register(@NotNull Placeholder<?> placeholder) {
-        placeholders.put(placeholder.getName(), placeholder);
+    public boolean remove(@NotNull String key) {
+        return placeholders.remove(key) != null;
     }
 
     @Override
@@ -52,13 +55,20 @@ public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
         return placeholders.containsKey(key);
     }
 
-    @Nullable
     @Override
-    public Matcher match(@NotNull String message) {
-        if (message.isEmpty()) {
-            return null;
-        }
+    public boolean register(@NotNull Placeholder<?> placeholder) {
+        return placeholders.put(placeholder.getName(), placeholder) != null;
+    }
 
-        return getPattern().matcher(message);
+    @NotNull
+    @Override
+    public Collection<Placeholder<?>> getPlaceholders() {
+        return Collections.unmodifiableCollection(placeholders.values());
+    }
+
+    @NotNull
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

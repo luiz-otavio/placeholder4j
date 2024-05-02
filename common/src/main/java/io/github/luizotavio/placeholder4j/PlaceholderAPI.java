@@ -14,68 +14,123 @@
  */
 package io.github.luizotavio.placeholder4j;
 
-import io.github.luizotavio.placeholder4j.cache.DefaultPlaceholderCache;
-import io.github.luizotavio.placeholder4j.replacer.DefaultPlaceholderReplacer;
+import io.github.luizotavio.placeholder4j.cache.PlaceholderCache;
+import io.github.luizotavio.placeholder4j.cache.PlaceholderCacheImpl;
+import io.github.luizotavio.placeholder4j.replacer.PlaceholderReplacer;
+import io.github.luizotavio.placeholder4j.replacer.PlaceholderReplacerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
 public class PlaceholderAPI {
 
-    private static final Logger LOGGER = Logger.getLogger(PlaceholderAPI.class.getName());
+    private final PlaceholderReplacer replacer;
 
-    private final DefaultPlaceholderReplacer replacer;
+    private final PlaceholderCache cache;
+
+    private final Logger logger;
+
 
     public PlaceholderAPI() {
-        this(new DefaultPlaceholderReplacer());
+        this(
+            Logger.getLogger("PlaceholderAPI"),
+            new PlaceholderCacheImpl(
+                Pattern.compile("%([^%]+)%", Pattern.CASE_INSENSITIVE)
+            )
+        );
     }
 
-    protected PlaceholderAPI(@NotNull DefaultPlaceholderReplacer replacer) {
+    public PlaceholderAPI(@NotNull Logger logger, @NotNull PlaceholderCache cache) {
+        this(
+            new PlaceholderReplacerImpl(cache),
+            cache,
+            logger
+        );
+    } {
+
+    }
+
+    public PlaceholderAPI(@NotNull Logger logger, @NotNull PlaceholderReplacer replacer) {
+        this(
+            replacer,
+            new PlaceholderCacheImpl(
+                Pattern.compile("%([^%]+)%", Pattern.CASE_INSENSITIVE)
+            ),
+            logger
+        );
+    }
+
+    PlaceholderAPI(
+        @NotNull PlaceholderReplacer replacer,
+        @NotNull PlaceholderCache cache,
+        @NotNull Logger logger
+    ) {
         this.replacer = replacer;
+        this.cache = cache;
+        this.logger = logger;
     }
 
     public void register(@NotNull Placeholder<?> placeholder) {
-        DefaultPlaceholderCache cache = replacer.getCache();
-
-        if (cache != null) {
-            cache.register(placeholder);
-        }
+        cache.register(placeholder);
     }
 
+    public boolean remove(@NotNull String placeholder) {
+        return cache.remove(placeholder);
+    }
+
+
+    @NotNull
     public String replace(@NotNull String text, @Nullable Object... args) {
         try {
             return replacer.replace(text, args);
-        } catch (Exception exception) {
-            LOGGER.severe("An error occurred while replacing placeholders: " + exception.getMessage());
+        } catch (@NotNull Exception exception) {
+            logger.severe("An error occurred while replacing placeholders: " + exception.getMessage());
         }
 
         return text;
     }
 
+    @NotNull
     public String[] replace(@NotNull String[] text, @Nullable Object... args) {
         try {
             return replacer.replace(text, args);
-        } catch (Exception exception) {
-            LOGGER.severe("An error occurred while replacing placeholders: " + exception.getMessage());
+        } catch (@NotNull Exception exception) {
+            logger.severe("An error occurred while replacing placeholders: " + exception.getMessage());
         }
 
         return text;
     }
 
+    @NotNull
     public Collection<String> replace(@NotNull Collection<String> text, @Nullable Object... args) {
         try {
             return replacer.replace(text, args);
-        } catch (Exception exception) {
-            LOGGER.severe("An error occurred while replacing placeholders: " + exception.getMessage());
+        } catch (@NotNull Exception exception) {
+            logger.severe("An error occurred while replacing placeholders: " + exception.getMessage());
         }
 
         return text;
+    }
+
+    @NotNull
+    public PlaceholderCache getCache() {
+        return cache;
+    }
+
+    @NotNull
+    public PlaceholderReplacer getReplacer() {
+        return replacer;
+    }
+
+    @NotNull
+    public Logger getLogger() {
+        return logger;
     }
 }

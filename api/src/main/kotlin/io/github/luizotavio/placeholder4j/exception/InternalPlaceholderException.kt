@@ -15,8 +15,8 @@
 package io.github.luizotavio.placeholder4j.exception
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
 class InternalPlaceholderException : Exception {
     constructor(throwable: Throwable) : super(throwable)

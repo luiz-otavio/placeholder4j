@@ -14,28 +14,37 @@
  */
 package io.github.luizotavio.placeholder4j.impl;
 
-import io.github.luizotavio.placeholder4j.Placeholder;
+import io.github.luizotavio.placeholder4j.AbstractPlaceholder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
- */
-public class VariablePlaceholder extends Placeholder {
+import java.util.function.Function;
 
-    public VariablePlaceholder(@NotNull String name) {
+/**
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
+ */
+public class FunctionPlaceholder<T> extends AbstractPlaceholder<T> {
+
+    private final Class<T> type;
+
+    private final Function<T, String> function;
+
+    public FunctionPlaceholder(@NotNull String name, @NotNull Class<T> clazz, @NotNull Function<T, String> function) {
         super(name);
+
+        this.type = clazz;
+        this.function = function;
     }
 
     @Override
     public boolean isCompatible(@NotNull Object value) {
-        return true;
+        return type.isInstance(value);
     }
 
     @NotNull
     @Override
-    public String resolve(@Nullable Object consumer) {
-        return String.valueOf(consumer);
+    public String resolve(@Nullable T consumer) {
+        return function.apply(consumer);
     }
 }

@@ -15,24 +15,32 @@
 package io.github.luizotavio.placeholder4j.cache
 
 import io.github.luizotavio.placeholder4j.Placeholder
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
-abstract class AbstractPlaceholderCache(
-    val pattern: Pattern
-) {
+/**
+ * Placeholder cache interface to be implemented by the library to store placeholders.
+ * The cache is used to store placeholders and replace them with values.
+ */
+interface PlaceholderCache {
 
-    abstract fun get(key: String): Placeholder<*>?
+    /**
+     * Returns the pattern used to match the placeholders.
+     * By default, the pattern is %(.+?)%.
+     */
+    fun getPattern(): Pattern
 
-    abstract fun register(placeholder: Placeholder<*>)
+    fun get(key: String): Placeholder<*>?
 
-    // Change to return the matcher instead of alot of placeholders
-    abstract fun match(message: String): Matcher?
+    fun register(placeholder: Placeholder<*>): Boolean
 
-    abstract fun exists(key: String): Boolean
+    fun remove(key: String): Boolean
+
+    fun exists(key: String): Boolean
+
+    fun getPlaceholders(): Collection<Placeholder<*>>
 
 }

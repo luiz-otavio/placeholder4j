@@ -18,23 +18,23 @@ import io.github.luizotavio.placeholder4j.AbstractPlaceholder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * @author Luiz O. F. Corrêa
  * @since 02/05/2024
  */
-public class ConsumerPlaceholder<T> extends AbstractPlaceholder<T> {
+public class FunctionPlaceholder<T> extends AbstractPlaceholder<T> {
 
     private final Class<T> type;
 
-    private final Supplier<T> supplier;
+    private final Function<T, String> function;
 
-    public ConsumerPlaceholder(@NotNull String name, @NotNull Class<T> clazz, @NotNull Supplier<T> supplier) {
+    public FunctionPlaceholder(@NotNull String name, @NotNull Class<T> clazz, @NotNull Function<T, String> function) {
         super(name);
 
         this.type = clazz;
-        this.supplier = supplier;
+        this.function = function;
     }
 
     @Override
@@ -44,8 +44,7 @@ public class ConsumerPlaceholder<T> extends AbstractPlaceholder<T> {
 
     @NotNull
     @Override
-    public String resolve(@Nullable Object consumer) {
-        return String.valueOf(supplier.get());
+    public String resolve(@Nullable T consumer) {
+        return function.apply(consumer);
     }
-
 }

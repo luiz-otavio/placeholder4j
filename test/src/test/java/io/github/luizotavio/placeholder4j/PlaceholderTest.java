@@ -14,59 +14,59 @@
  */
 package io.github.luizotavio.placeholder4j;
 
-import io.github.luizotavio.placeholder4j.cache.DefaultPlaceholderCache;
-import io.github.luizotavio.placeholder4j.exception.InternalPlaceholderException;
-import io.github.luizotavio.placeholder4j.impl.ConsumerPlaceholder;
+import io.github.luizotavio.placeholder4j.impl.FunctionPlaceholder;
 import io.github.luizotavio.placeholder4j.impl.VariablePlaceholder;
-import io.github.luizotavio.placeholder4j.replacer.DefaultPlaceholderReplacer;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
 public class PlaceholderTest {
 
-    private static DefaultPlaceholderReplacer replacer;
+    private static PlaceholderAPI placeholderAPI;
 
     @BeforeAll
     public static void setupAll() {
-        replacer = new DefaultPlaceholderReplacer();
+        placeholderAPI = new PlaceholderAPI();
 
-        DefaultPlaceholderCache commonPlaceholderCache = replacer.getCache();
-
-        commonPlaceholderCache.register(new VariablePlaceholder("test-unit-case-1"));
-        commonPlaceholderCache.register(new VariablePlaceholder("test-unit-case-2"));
-        commonPlaceholderCache.register(new ConsumerPlaceholder("test-unit-case-3", () -> "Luiz Otávio"));
+        placeholderAPI.register(new VariablePlaceholder("test-unit-case-1", "1"));
+        placeholderAPI.register(new VariablePlaceholder("test-unit-case-2", "2"));
+        placeholderAPI.register(new FunctionPlaceholder<>("test-unit-case-3", String.class, (value) -> value));
     }
 
     @Test
-    @DisplayName("Test unit case 1")
-    public void testUnitCase1() throws InternalPlaceholderException {
-        Assertions.assertEquals(
+    public void checkForTestUnitCase1() {
+        assertEquals(
           "1",
-          replacer.replace("%test-unit-case-1%", "1")
+          placeholderAPI.replace("%test-unit-case-1%")
         );
     }
 
     @Test
-    @DisplayName("Test unit case 2")
-    public void testUnitCase2() throws InternalPlaceholderException {
-        Assertions.assertEquals(
-          "Jonh",
-          replacer.replace("%test-unit-case-2%", "Jonh")
+    public void checkForTestUnitCase2() {
+        assertEquals(
+          "2",
+          placeholderAPI.replace("%test-unit-case-2%")
         );
     }
 
     @Test
-    @DisplayName("Test unit case 3")
-    public void testUnitCase3() throws InternalPlaceholderException {
-        Assertions.assertEquals(
+    public void checkForTestUnitCase3() {
+        assertEquals(
           "Luiz Otávio",
-          replacer.replace("%test-unit-case-3%")
+          placeholderAPI.replace("%test-unit-case-3%", "Luiz Otávio")
+        );
+    }
+
+    @Test
+    public void checkForPlaceholderRemove() {
+        assertTrue(
+          placeholderAPI.remove("test-unit-case-1")
         );
     }
 }

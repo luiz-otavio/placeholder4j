@@ -15,7 +15,7 @@
 package io.github.luizotavio.placeholder4j.replacer;
 
 import io.github.luizotavio.placeholder4j.Placeholder;
-import io.github.luizotavio.placeholder4j.cache.DefaultPlaceholderCache;
+import io.github.luizotavio.placeholder4j.cache.PlaceholderCache;
 import io.github.luizotavio.placeholder4j.exception.InternalPlaceholderException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,39 +24,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
-public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
+public class PlaceholderReplacerImpl implements PlaceholderReplacer {
 
-    public static final String PLACEHOLDER_PATTERN_STRING = "[%]([^%]+)[%]";
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
-    private final DefaultPlaceholderCache cache;
+    private final PlaceholderCache cache;
 
-    public DefaultPlaceholderReplacer() {
-        this.cache = new DefaultPlaceholderCache(
-            Pattern.compile(PLACEHOLDER_PATTERN_STRING, Pattern.CASE_INSENSITIVE)
-        );
-    }
-
-    public DefaultPlaceholderCache getCache() {
-        return cache;
+    public PlaceholderReplacerImpl(@NotNull PlaceholderCache cache) {
+        this.cache = cache;
     }
 
     @NotNull
     @Override
-    public String replace(@NotNull String text, @Nullable Object... objects) throws InternalPlaceholderException {
-        Matcher targets = cache.match(text);
-
-        if (targets == null) {
-            return text;
-        }
-
-        Stream<Object> objectStream = Stream.of(objects);
+    public String replace(
+        @NotNull String text,
+        @Nullable Object... objects
+    ) throws InternalPlaceholderException {
+        Matcher targets = match(text);
 
         StringBuilder builder = new StringBuilder(text);
         while (targets.find()) {
@@ -71,50 +61,32 @@ public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
                 continue;
             }
 
-            Object object = objectStream.filter(placeholder::isCompatible)
-                .findAny()
-                .orElse(null);
+            Object object = null;
+            for (@NotNull Object targetObject : objects == null ? EMPTY_OBJECT_ARRAY : objects) {
+                if (placeholder.isCompatible(targetObject)) {
+                    object = targetObject;
+                    break;
+                }
+            }
 
             if (object == null) {
-                continue;
+                throw new InternalPlaceholderException("Object not found for placeholder: " + group);
             }
 
             String replacement = placeholder.resolve(object);
 
             builder.replace(targets.start(), targets.end(), replacement);
         }
-//        return targets.replaceAll(result -> {
-//            String group = result.group(1);
-//
-//            if (group == null) {
-//                return "N/A";
-//            }
-//
-//            Placeholder placeholder = cache.get(group);
-//
-//            if (placeholder == null) {
-//                Object object = objects[currentIndex.getAndIncrement()];
-//
-//                if (object == null) {
-//                    return "N/A";
-//                }
-//
-//                return object.toString();
-//            } else {
-//                Object object = objectStream.filter(placeholder::isCompatible)
-//                    .findAny()
-//                    .orElse(null);
-//
-//                return placeholder.resolve(object);
-//            }
-//        });
 
         return builder.toString();
     }
 
     @NotNull
     @Override
-    public Collection<String> replace(@NotNull Collection<String> collection, @Nullable Object... values) throws InternalPlaceholderException {
+    public Collection<String> replace(
+        @NotNull Collection<String> collection,
+        @Nullable Object... values
+    ) throws InternalPlaceholderException {
         List<String> base = new ArrayList<>(collection);
 
         for (String text : base) {
@@ -133,7 +105,10 @@ public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
 
     @NotNull
     @Override
-    public String[] replace(@NotNull String[] collection, @Nullable Object... values) throws InternalPlaceholderException {
+    public String[] replace(
+        @NotNull String[] collection,
+        @Nullable Object... values
+    ) throws InternalPlaceholderException {
         for (int i = 0; i < collection.length; i++) {
             String text = collection[i];
 
@@ -145,5 +120,11 @@ public class DefaultPlaceholderReplacer implements PlaceholderReplacer {
         }
 
         return collection;
+    }
+
+    @NotNull
+    private Matcher match(@NotNull String text) {
+        return cache.getPattern()
+            .matcher(text);
     }
 }

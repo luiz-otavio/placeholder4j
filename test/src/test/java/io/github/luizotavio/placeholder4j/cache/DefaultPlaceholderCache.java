@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * @author Luiz Otávio de Farias Corrêa
  * @since 26/07/2022
  */
-public class DefaultPlaceholderCache extends AbstractPlaceholderCache {
+public class DefaultPlaceholderCache extends PlaceholderCache {
 
     private final Map<String, Placeholder<?>> placeholders;
 

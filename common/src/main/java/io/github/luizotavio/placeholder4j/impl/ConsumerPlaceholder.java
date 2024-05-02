@@ -14,29 +14,32 @@
  */
 package io.github.luizotavio.placeholder4j.impl;
 
-import io.github.luizotavio.placeholder4j.Placeholder;
+import io.github.luizotavio.placeholder4j.AbstractPlaceholder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
-public class ConsumerPlaceholder extends Placeholder {
+public class ConsumerPlaceholder<T> extends AbstractPlaceholder<T> {
 
-    private Supplier<Object> supplier;
+    private final Class<T> type;
 
-    public ConsumerPlaceholder(@NotNull String name, Supplier<Object> supplier) {
+    private final Supplier<T> supplier;
+
+    public ConsumerPlaceholder(@NotNull String name, @NotNull Class<T> clazz, @NotNull Supplier<T> supplier) {
         super(name);
 
+        this.type = clazz;
         this.supplier = supplier;
     }
 
     @Override
     public boolean isCompatible(@NotNull Object value) {
-        return true;
+        return type.isInstance(value);
     }
 
     @NotNull
@@ -44,4 +47,5 @@ public class ConsumerPlaceholder extends Placeholder {
     public String resolve(@Nullable Object consumer) {
         return String.valueOf(supplier.get());
     }
+
 }

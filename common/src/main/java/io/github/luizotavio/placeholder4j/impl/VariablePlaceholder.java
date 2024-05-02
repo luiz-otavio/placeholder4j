@@ -14,18 +14,21 @@
  */
 package io.github.luizotavio.placeholder4j.impl;
 
-import io.github.luizotavio.placeholder4j.Placeholder;
+import io.github.luizotavio.placeholder4j.AbstractPlaceholder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
  */
-public class VariablePlaceholder extends Placeholder {
+public class VariablePlaceholder extends AbstractPlaceholder<String> {
 
-    public VariablePlaceholder(@NotNull String name) {
+    private final String value;
+
+    public VariablePlaceholder(@NotNull String name, @NotNull String value) {
         super(name);
+        this.value = value;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class VariablePlaceholder extends Placeholder {
 
     @NotNull
     @Override
-    public String resolve(@Nullable Object consumer) {
-        return String.valueOf(consumer);
+    public String resolve(@Nullable String consumer) {
+        return String.valueOf(value);
     }
 }

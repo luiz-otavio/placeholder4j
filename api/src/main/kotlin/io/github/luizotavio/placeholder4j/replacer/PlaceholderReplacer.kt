@@ -17,17 +17,46 @@ package io.github.luizotavio.placeholder4j.replacer
 import io.github.luizotavio.placeholder4j.exception.InternalPlaceholderException
 
 /**
- * @author Luiz Otávio de Farias Corrêa
- * @since 26/07/2022
+ * @author Luiz O. F. Corrêa
+ * @since 02/05/2024
+ */
+/**
+ * Replacer interface to be implemented by the library to
+ * replace placeholders with given text and optional values.
+ * The values from the methods are nullable, so you can pass null as a value,
+ * and it will be replaced with an empty string.
+ * Otherwise, if you are using a placeholder based on a passed parameter,
+ * you need to pass the parameter as a value.
  */
 interface PlaceholderReplacer {
 
+    /**
+     * Replace the given text with the values passed.
+     * @param text the text to replace
+     * @param values the values to replace
+     * @return the replaced text
+     * @throws InternalPlaceholderException if there aren't compatible types between the placeholder and the value
+     */
     @Throws(InternalPlaceholderException::class)
     fun replace(text: String, vararg values: Any): String
 
+    /**
+     * Replace the given string collection with the values passed.
+     * @param collection the collection to replace
+     * @param values the values to replace
+     * @return the replaced collection
+     * @throws InternalPlaceholderException if there aren't compatible types between the placeholder and the value
+     */
     @Throws(InternalPlaceholderException::class)
     fun replace(collection: Collection<String>, vararg values: Any): Collection<String>
 
+    /**
+     * Replace the given string array with the values passed.
+     * @param collection the array to replace
+     * @param values the values to replace
+     * @return the replaced array
+     * @throws InternalPlaceholderException if there aren't compatible types between the placeholder and the value
+     */
     @Throws(InternalPlaceholderException::class)
     fun replace(collection: Array<String>, vararg values: Any): Array<String>
 
